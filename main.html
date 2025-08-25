@@ -13,13 +13,31 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
+        :root {
+            --primary-gradient: linear-gradient(90deg, #00dbde, #fc00ff);
+            --bg-gradient: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --text-color: #fff;
+            --text-secondary: #ccc;
+            --header-border: rgba(255, 255, 255, 0.1);
+        }
+        
+        body.dark-mode {
+            --bg-gradient: linear-gradient(135deg, #1a1a1a, #2d2d2d, #333333);
+            --card-bg: rgba(255, 255, 255, 0.08);
+            --text-color: #f0f0f0;
+            --text-secondary: #aaa;
+            --header-border: rgba(255, 255, 255, 0.08);
+        }
+        
         body {
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-            color: #fff;
+            background: var(--bg-gradient);
+            color: var(--text-color);
             min-height: 100vh;
             overflow-x: hidden;
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
+            transition: all 0.5s ease;
         }
         
         @keyframes gradientBG {
@@ -34,21 +52,69 @@
             padding: 20px;
         }
         
+        .username-tag {
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 16px;
+            color: #00dbde;
+            text-shadow: 0 0 8px rgba(0, 219, 222, 0.6);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 0 0 8px rgba(0, 219, 222, 0.6); }
+            to { text-shadow: 0 0 12px rgba(0, 219, 222, 0.8), 0 0 16px rgba(0, 219, 222, 0.6); }
+        }
+        
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 20px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid var(--header-border);
         }
         
         .logo {
             font-size: 28px;
             font-weight: 700;
-            background: linear-gradient(90deg, #00dbde, #fc00ff);
+            background: var(--primary-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+        
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .theme-toggle {
+            background: var(--card-bg);
+            border: 1px solid var(--header-border);
+            width: 50px;
+            height: 26px;
+            border-radius: 25px;
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 0 3px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .theme-toggle-handle {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            position: absolute;
+            transition: all 0.3s ease;
+            left: 3px;
+        }
+        
+        .theme-toggle.dark .theme-toggle-handle {
+            left: 27px;
         }
         
         .nav-links {
@@ -57,7 +123,7 @@
         }
         
         .nav-links a {
-            color: #fff;
+            color: var(--text-color);
             text-decoration: none;
             font-weight: 500;
             transition: all 0.3s ease;
@@ -82,7 +148,7 @@
             font-size: 20px;
             max-width: 700px;
             margin: 0 auto 40px;
-            color: #ccc;
+            color: var(--text-secondary);
         }
         
         .buttons {
@@ -102,24 +168,26 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            cursor: pointer;
         }
         
         .btn-primary {
-            background: linear-gradient(90deg, #00dbde, #fc00ff);
+            background: var(--primary-gradient);
             color: white;
             box-shadow: 0 0 15px rgba(0, 219, 222, 0.5);
+            border: none;
         }
         
         .btn-primary:hover {
             transform: translateY(-3px);
-            box-shadow: 0 0 25px rgba(0, 219, 222, 0.8);
+            box-shadow: 极 0 25px rgba(0, 219, 222, 0.8);
         }
         
         .btn-secondary {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             color: white;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 极.2);
         }
         
         .btn-secondary:hover {
@@ -135,7 +203,7 @@
         }
         
         .feature-card {
-            background: rgba(255, 255, 255, 0.05);
+            background: var(--card-bg);
             backdrop-filter: blur(10px);
             border-radius: 15px;
             padding: 30px;
@@ -152,7 +220,7 @@
         .feature-icon {
             font-size: 40px;
             margin-bottom: 20px;
-            background: linear-gradient(90deg, #00dbde, #fc00ff);
+            background: var(--primary-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -163,7 +231,7 @@
         }
         
         .feature-card p {
-            color: #ccc;
+            color: var(--text-secondary);
             line-height: 1.6;
         }
         
@@ -180,7 +248,7 @@
         .particle {
             position: absolute;
             border-radius: 50%;
-            background: linear-gradient(90deg, #00dbde, #fc00ff);
+            background: var(--primary-gradient);
             opacity: 0.3;
             animation: float 15s infinite linear;
         }
@@ -194,8 +262,8 @@
             text-align: center;
             padding: 30px 0;
             margin-top: 60px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: #ccc;
+            border-top: 1px solid var(--header-border);
+            color: var(--text-secondary);
         }
         
         @media (max-width: 768px) {
@@ -220,14 +288,21 @@
     <div class="particles" id="particles"></div>
     
     <div class="container">
+        <div class="username-tag">jogs0110 on discord</div>
+        
         <header>
             <div class="logo">byfron.icu</div>
-            <nav class="nav-links">
-                <a href="#">Home</a>
-                <a href="#">Products</a>
-                <a href="#">FAQ</a>
-                <a href="#">Support</a>
-            </nav>
+            <div class="header-controls">
+                <nav class="nav-links">
+                    <a href="#">Home</a>
+                    <a href="#">Products</a>
+                    <a href="#">FAQ</a>
+                    <a href="#">Support</a>
+                </nav>
+                <div class="theme-toggle" id="themeToggle">
+                    <div class="theme-toggle-handle"></div>
+                </div>
+            </div>
         </header>
         
         <section class="hero">
@@ -272,7 +347,7 @@
     </div>
     
     <footer>
-        <p>© byfron.icu  All rights unreserved.</p>
+        <p>© byfron.icu All rights unreserved.</p>
     </footer>
 
     <script>
@@ -299,11 +374,22 @@
             }
         }
         
-        // Redirect to script page
-        document.querySelector('.btn-primary').addEventListener('click', function(e) {
-            e.preventDefault();
-            window.location.href = 'scripts.html'; // Change to your actual script page URL
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            themeToggle.classList.toggle('dark');
+            
+            // Save theme preference to localStorage
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDarkMode);
         });
+        
+        // Check for saved theme preference
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+            themeToggle.classList.add('dark');
+        }
         
         // Initialize particles
         createParticles();
