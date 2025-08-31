@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Text – Image – Text</title>
+  <style>
+    :root { --gap: 1.25rem; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; line-height: 1.6; background: #0b0b0c; color: #e9e9ea; }
+    main { max-width: 800px; margin: 6vh auto; padding: 0 1rem; }
+    .card { background: #141416; border: 1px solid #222327; border-radius: 16px; padding: calc(var(--gap) * 1.25); box-shadow: 0 8px 24px rgba(0,0,0,.3); }
+    .top-text, .bottom-text { margin: 0; font-size: 1.05rem; }
+    .top-text { margin-bottom: var(--gap); }
+    .bottom-text { margin-top: var(--gap); }
+    img { display: block; width: 100%; height: auto; border-radius: 12px; border: 1px solid #222327; }
+    figcaption { font-size: .9rem; opacity: .8; margin-top: .5rem; }
+    .muted { opacity: .8; }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="card">
+      
+      <p class="top-text">
+        Look at this fool🤣
+      </p>
+
+      <figure>
+        <img
+          src="https://media.discordapp.net/attachments/706846926770798652/1411830540889231520/image.png?ex=68b61527&is=68b4c3a7&hm=48bc6bf521fea33947167a6780b5f2e943ab008b02b4c5938dbf21b9aef93aa2&=&format=webp&quality=lossless&width=676&height=129"
+          alt="Plch"
+          loading="lazy"
+        />
+        <figcaption class="muted">I think he is a little mad 😂</figcaption>
+      </figure>
+
+      
+      <p class="bottom-text">
+        nice site tho vexcheat.cc 😂😘👌.
+      </p>
+    </div>
+  </main>
+</body>
+</html>
