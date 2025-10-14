@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>jogs | About Me</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+  body {
+    background: radial-gradient(circle at top, #0f0f1a, #000);
+    color: white;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* --- ENTRY GATE --- */
+  .gate {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(10, 10, 20, 0.9);
+    backdrop-filter: blur(15px);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    z-index: 10;
+    transition: opacity 1s ease;
+  }
+
+  .slider-container {
+    width: 320px; height: 55px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 30px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slider {
+    width: 55px; height: 55px;
+    background: linear-gradient(45deg, #00d2ff, #3a47d5);
+    border-radius: 50%;
+    position: absolute; left: 0; top: 0;
+    cursor: grab;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: bold; color: white;
+    transition: background 0.3s;
+  }
+
+  .slider-text {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    line-height: 55px;
+    font-size: 14px;
+    color: #ccc;
+    pointer-events: none;
+  }
+
+  /* --- MAIN CARD --- */
+  .card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 25px;
+    box-shadow: 0 0 25px rgba(0,255,255,0.15);
+    backdrop-filter: blur(12px);
+    padding: 40px;
+    text-align: center;
+    width: 900px;
+    transition: transform 1s ease, opacity 1s ease;
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  .card.visible {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .profile-pic {
+    width: 110px; height: 110px;
+    border-radius: 50%;
+    border: 3px solid rgba(0,255,255,0.5);
+    object-fit: cover;
+    margin-bottom: 15px;
+    box-shadow: 0 0 15px rgba(0,255,255,0.3);
+  }
+
+  .username {
+    font-size: 2.2em;
+    font-weight: 700;
+    background: linear-gradient(90deg, #00d2ff, #3a47d5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .bio {
+    font-size: 1em;
+    color: #aaa;
+    margin: 10px auto 25px;
+    max-width: 700px;
+  }
+
+  /* --- GRID LAYOUT --- */
+  .sections {
+    display: flex;
+    justify-content: space-between;
+    text-align: left;
+    gap: 25px;
+  }
+
+  .section {
+    flex: 1;
+    background: rgba(255,255,255,0.05);
+    border-radius: 15px;
+    padding: 20px;
+    height: 270px;
+    overflow: hidden;
+    transition: background 0.4s, transform 0.3s;
+  }
+
+  .section:hover {
+    background: rgba(255,255,255,0.1);
+    transform: translateY(-6px);
+  }
+
+  .section h3 {
+    font-size: 1.3em;
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 5px;
+  }
+
+  .cheat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 5px 0;
+    color: #ddd;
+  }
+
+  .cheat-item i {
+    font-style: normal;
+    font-size: 18px;
+  }
+
+  .project-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 8px 0;
+  }
+
+  .project-item span {
+    font-weight: bold;
+    font-size: 1.1em;
+  }
+
+  .icon-good { color: #00ffcc; }
+  .icon-mid { color: #ffaa00; }
+  .icon-bad { color: #ff5555; }
+</style>
+</head>
+<body>
+
+<!-- ENTRY SCREEN -->
+<div class="gate">
+  <h2 style="margin-bottom:15px;">Slide to Enter</h2>
+  <div class="slider-container" id="slider-container">
+    <div class="slider" id="slider">→</div>
+    <span class="slider-text">Hold and drag right</span>
+  </div>
+</div>
+
+<!-- AUDIO -->
+<audio id="bg-music" src="https://cdn.pixabay.com/download/audio/2023/04/05/audio_1a2ed3d418.mp3?filename=lofi-study-145309.mp3"></audio>
+
+<!-- MAIN CARD -->
+<div class="card" id="main-card">
+  <img src="https://i.imgur.com/3GvwNBf.png" alt="Profile" class="profile-pic">
+  <div class="username">jogs</div>
+  <div class="bio">Hey, I’m jogs 👋 — a creative mind exploring the world of scripts, exploits, and coding experiments.  
+  Always curious, always building something new.</div>
+
+  <div class="sections">
+
+    <div class="section">
+      <h3>🎮 Roblox Cheat History</h3>
+      <div class="cheat-item"><i class="icon-good">✔️</i>Legit</div>
+      <div class="cheat-item"><i class="icon-mid">⚙️</i>JJSploit</div>
+      <div class="cheat-item"><i class="icon-bad">🔥</i>Synapse X</div>
+      <div class="cheat-item"><i class="icon-mid">⚙️</i>Fluxus</div>
+      <div class="cheat-item"><i class="icon-good">✔️</i>Legit</div>
+      <div class="cheat-item"><i class="icon-mid">⚙️</i>Solara</div>
+      <div class="cheat-item"><i class="icon-mid">⚙️</i>Delta</div>
+      <div class="cheat-item"><i class="icon-bad">🔥</i>Xeno</div>
+      <div class="cheat-item"><i class="icon-mid">⚙️</i>Velocity</div>
+      <div class="cheat-item"><i class="icon-mid">⚙️</i>Volcano</div>
+      <div class="cheat-item"><i class="icon-mid">⚙️</i>Zenith</div>
+      <div class="cheat-item"><i class="icon-bad">💀</i>Severe</div>
+    </div>
+
+    <div class="section">
+      <h3>🎯 Fortnite Cheat History</h3>
+      <div class="cheat-item"><i class="icon-good">✔️</i>Legit</div>
+      <div class="cheat-item"><i class="icon-bad">💣</i>Random ultra DTC NN cheat</div>
+      <div class="cheat-item"><i class="icon-bad">🚫</i>Got banned</div>
+      <div class="cheat-item"><i class="icon-good">✔️</i>Legit</div>
+
+      <h3 style="margin-top:10px;">⭐ Brawl Stars</h3>
+      <div class="cheat-item"><i class="icon-good">✔️</i>Legit</div>
+      <div class="cheat-item"><i class="icon-mid">⚙️</i>BSD (SEMI)</div>
+      <div class="cheat-item"><i class="icon-mid">⚙️</i>Tale Stars (SEMI)</div>
+    </div>
+
+    <div class="section">
+      <h3>🧠 Projects</h3>
+      <div class="project-item"><i class="icon-good">[+]</i><span>NeverLose</span> – Skidded and bad Roblox script</div>
+      <div class="project-item"><i class="icon-bad">[~]</i><span>PSPWare</span> – Failed Roblox external</div>
+      <div class="project-item"><i class="icon-good">[+]</i><span>Shok Lite</span> – Roblox Grow a Garden infinite money exploit</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const slider = document.getElementById('slider');
+const container = document.getElementById('slider-container');
+const gate = document.querySelector('.gate');
+const card = document.getElementById('main-card');
+const music = document.getElementById('bg-music');
+
+let isDragging = false;
+let startX = 0;
+let offsetX = 0;
+
+slider.addEventListener('mousedown', (e) => {
+  isDragging = true;
+  startX = e.clientX;
+});
+
+document.addEventListener('mousemove', (e) => {
+  if (!isDragging) return;
+  offsetX = e.clientX - startX;
+  if (offsetX < 0) offsetX = 0;
+  if (offsetX > container.offsetWidth - slider.offsetWidth)
+    offsetX = container.offsetWidth - slider.offsetWidth;
+  slider.style.left = offsetX + 'px';
+});
+
+document.addEventListener('mouseup', () => {
+  if (!isDragging) return;
+  isDragging = false;
+  if (offsetX >= container.offsetWidth - slider.offsetWidth - 10) {
+    gate.style.opacity = 0;
+    setTimeout(() => (gate.style.display = 'none'), 1000);
+    card.classList.add('visible');
+    music.play().catch(() => {});
+  } else {
+    slider.style.left = '0px';
+  }
+});
+</script>
+
+</body>
+</html>
