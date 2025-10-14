@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>About — jogs</title>
+<style>
+  :root{
+    --bg1:#0f1724;
+    --bg2:#2a1640;
+    --card: rgba(255,255,255,0.06);
+    --accent: #7c5cff;
+    --muted: #bfc7d7;
+    --glass: rgba(255,255,255,0.04);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    background: linear-gradient(120deg,var(--bg1),var(--bg2));
+    color:#eaf0ff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:30px;
+  }
+
+  .wrap{
+    width:100%;
+    max-width:980px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:16px;
+    padding:28px;
+    box-shadow: 0 10px 35px rgba(4,6,15,0.6);
+    position:relative;
+    overflow:hidden;
+  }
+
+  /* GATE / SLIDER */
+  .gate {
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    gap:18px;
+    background: linear-gradient(180deg, rgba(5,6,10,0.9), rgba(9,10,18,0.85));
+    z-index:30;
+    transition:opacity .5s ease, transform .45s ease;
+    padding:20px;
+  }
+  .gate.hidden{ opacity:0; pointer-events:none; transform:translateY(-10px) }
+  .gate h2{ font-size:18px; color:var(--muted); letter-spacing:0.6px }
+
+  .slider-wrap{
+    width:320px;
+    max-width:88%;
+    background:var(--card);
+    border-radius:999px;
+    padding:6px;
+    position:relative;
+    user-select:none;
+    touch-action:none;
+    box-shadow: inset 0 2px 8px rgba(0,0,0,0.45);
+  }
+  .slider-track{
+    height:44px;
+    border-radius:999px;
+    position:relative;
+    overflow:hidden;
+  }
+
+  .slider-fill{
+    position:absolute;
+    left:0; top:0; bottom:0;
+    width:0;
+    background: linear-gradient(90deg, rgba(124,92,255,0.3), rgba(124,180,255,0.12));
+    transition: none;
+  }
+
+  .slider-thumb{
+    position:absolute;
+    height:44px; width:44px;
+    border-radius:50%;
+    left:0; top:0;
+    display:grid; place-items:center;
+    background:linear-gradient(180deg,var(--accent), #4b3ec9);
+    box-shadow: 0 6px 18px rgba(124,92,255,0.18), 0 1px 0 rgba(255,255,255,0.06) inset;
+    cursor:grab;
+    touch-action:none;
+    transform:translateZ(0);
+  }
+  .slider-thumb:active{ cursor:grabbing }
+
+  .slider-label{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    pointer-events:none;
+    font-size:14px;
+    color:var(--muted);
+  }
+  .slider-hint{ font-size:12px; color:#cbd6ff88 }
+
+  /* MAIN content */
+  .main {
+    display:grid;
+    grid-template-columns: 220px 1fr;
+    gap:24px;
+    align-items:start;
+  }
+
+  /* left column (profile) */
+  .profile {
+    text-align:center;
+    padding:12px;
+  }
+  .avatar{
+    width:140px;height:140px;border-radius:50%;object-fit:cover;
+    border:4px solid rgba(255,255,255,0.08);
+    box-shadow: 0 8px 30px rgba(2,6,20,0.6);
+    background:linear-gradient(180deg,#0f1724,#2a1640);
+    margin:12px auto;
+  }
+  .username{ font-size:28px;font-weight:700;margin-top:8px }
+  .bio{ color:var(--muted); font-size:14px; margin-top:10px; line-height:1.45; }
+
+  /* right column (tabs + content) */
+  .panel{
+    background:var(--glass);
+    padding:16px;
+    border-radius:12px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+  }
+
+  .tabs{
+    display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap;
+  }
+  .tab-btn{
+    padding:8px 12px; border-radius:10px; background:transparent; border:1px solid rgba(255,255,255,0.03);
+    color:var(--muted); cursor:pointer; font-weight:600; font-size:13px;
+  }
+  .tab-btn.active{ background:linear-gradient(90deg,var(--accent),#6aa8ff22); color:white; border-color: rgba(124,92,255,0.3) }
+
+  .tab-content{
+    display:none;
+    animation:fadeIn .28s ease both;
+  }
+  .tab-content.active{ display:block }
+
+  @keyframes fadeIn{ from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none} }
+
+  /* lists styling */
+  .history-row{
+    display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin:12px 0;
+  }
+
+  .exploit-pill{
+    min-width:110px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:12px;
+    padding:10px;
+    display:flex; flex-direction:column; align-items:center; gap:8px;
+    box-shadow: 0 6px 16px rgba(1,4,10,0.45);
+    border:1px solid rgba(255,255,255,0.02);
+    text-align:center;
+  }
+  .exploit-icon{
+    width:42px;height:42px;border-radius:10px; display:grid; place-items:center; font-size:20px;
+    background:rgba(255,255,255,0.03);
+  }
+  .exploit-name{ font-size:13px; font-weight:600; color:#f5f7ff }
+  .exploit-sub{ font-size:12px; color:var(--muted); margin-top:4px }
+
+  /* project list */
+  .projects{
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .project-item{
+    padding:12px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    display:flex; justify-content:space-between; align-items:center; gap:12px;border:1px solid rgba(255,255,255,0.02);
+  }
+  .project-left{display:flex; gap:10px; align-items:center}
+  .project-bullet{width:10px;height:10px;border-radius:2px;background:var(--accent)}
+  .project-title{font-weight:700}
+  .project-meta{ color:var(--muted); font-size:13px }
+
+  /* small helpers */
+  .muted{ color:var(--muted); font-size:13px }
+  .small{ font-size:12px; color:var(--muted) }
+
+  /* responsive */
+  @media (max-width:880px){
+    .main{ grid-template-columns:1fr; }
+    .profile{ order:2 }
+    .panel{ order:1 }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <!-- GATE -->
+  <div class="gate" id="gate">
+    <h2>Slide to enter — unlock the page</h2>
+
+    <div class="slider-wrap" id="sliderWrap" aria-hidden="false">
+      <div class="slider-track" id="sliderTrack" style="position:relative;">
+        <div class="slider-fill" id="sliderFill"></div>
+        <div class="slider-thumb" id="sliderThumb" role="button" aria-label="slide to unlock" tabindex="0">
+          ▶
+        </div>
+        <div class="slider-label"><div class="slider-hint">Drag the circle to the right to enter</div></div>
+      </div>
+    </div>
+
+    <div class="small">This action counts as a user gesture and will allow autoplay audio.</div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main" aria-live="polite">
+    <!-- LEFT: profile -->
+    <div class="profile">
+      <img class="avatar" id="avatar" src="https://i.imgur.com/3GvwNBf.png" alt="profile picture">
+      <div class="username">jogs</div>
+      <div class="bio">Hey, I’m jogs 👋 — I love experimenting with games, coding fun projects, and exploring creative hacks. Always testing ideas and learning new things.</div>
+      <div style="margin-top:12px" class="muted">Quick links</div>
+      <div style="margin-top:8px;display:flex;gap:8px;justify-content:center">
+        <a class="tab-btn" href="#" style="text-decoration:none">GitHub</a>
+        <a class="tab-btn" href="#" style="text-decoration:none">Discord</a>
+      </div>
+    </div>
+
+    <!-- RIGHT: panel with tabs -->
+    <div class="panel" role="region" aria-label="Cheats and projects">
+      <div class="tabs" role="tablist">
+        <button class="tab-btn active" data-tab="tab-cheats" role="tab" aria-selected="true">Cheats</button>
+        <button class="tab-btn" data-tab="tab-projects" role="tab">Projects</button>
+        <button class="tab-btn" data-tab="tab-about" role="tab">About</button>
+      </div>
+
+      <!-- CHEATS TAB -->
+      <div id="tab-cheats" class="tab-content active">
+        <div class="small">Click any pill to open details (demo)</div>
+
+        <h4 style="margin-top:12px">Roblox Cheat History</h4>
+        <div class="history-row" aria-hidden="false">
+          <!-- sequence: show each as pill with icon -->
+          <div class="exploit-pill" title="Legit">
+            <div class="exploit-icon">✅</div>
+            <div class="exploit-name">Legit</div>
+          </div>
+          <div class="exploit-pill">
+            <div class="exploit-icon">🟣</div>
+            <div class="exploit-name">JJSploit</div>
+          </div>
+          <div class="exploit-pill">
+            <div class="exploit-icon">🪄</div>
+            <div class="exploit-name">Synapse X</div>
+          </div>
+          <div class="exploit-pill">
+            <div class="exploit-icon">🔥</div>
+            <div class="exploit-name">Fluxus</div>
+          </div>
+          <div class="exploit-pill">
+            <div class="exploit-icon">✅</div>
+            <div class="exploit-name">Legit</div>
+          </div>
+          <div class="exploit-pill">
+            <div class="exploit-icon">🌤️</div>
+            <div class="exploit-name">Solara</div>
+          </div>
+          <div class="exploit-pill">
+            <div class="exploit-icon">⚡</div>
+            <div class="exploit-name">Delta</div>
+          </div>
+          <div class="exploit-pill">
+            <div class="exploit-icon">🌀</div>
+            <div class="exploit-name">Xeno</div>
+          </div>
+          <div class="exploit-pill">
+            <div class="exploit-icon">🚀</div>
+            <div class="exploit-name">Velocity</div>
+          </div>
+          <div class="exploit-pill">
+            <div class="exploit-icon">🌋</div>
+            <div class="exploit-name">Volcano</div>
+          </div>
+          <div class="exploit-pill">
+            <div class="exploit-icon">🏔️</div>
+            <div class="exploit-name">Zenith</div>
+          </div>
+          <div class="exploit-pill">
+            <div class="exploit-icon">⛑️</div>
+            <div class="exploit-name">Severe</div>
+          </div>
+        </div>
+
+        <h4 style="margin-top:16px">Fortnite cheat history</h4>
+        <div class="history-row">
+          <div class="exploit-pill"><div class="exploit-icon">✅</div><div class="exploit-name">Legit</div></div>
+          <div class="exploit-pill"><div class="exploit-icon">❓</div><div class="exploit-name">Random ultra dtc nn cheat</div></div>
+          <div class="exploit-pill"><div class="exploit-icon">⛔</div><div class="exploit-name">got banned</div></div>
+          <div class="exploit-pill"><div class="exploit-icon">✅</div><div class="exploit-name">Legit</div></div>
+        </div>
+
+        <h4 style="margin-top:16px">Brawl Stars</h4>
+        <div class="history-row">
+          <div class="exploit-pill"><div class="exploit-icon">✅</div><div class="exploit-name">Legit</div></div>
+          <div class="exploit-pill"><div class="exploit-icon">⚖️</div><div class="exploit-name">BSD (SEMI)</div></div>
+          <div class="exploit-pill"><div class="exploit-icon">♟️</div><div class="exploit-name">Tale Stars (SEMI)</div></div>
+        </div>
+      </div>
+
+      <!-- PROJECTS TAB -->
+      <div id="tab-projects" class="tab-content">
+        <div class="projects">
+          <div class="project-item">
+            <div class="project-left">
+              <div class="project-bullet"></div>
+              <div>
+                <div class="project-title">NeverLose</div>
+                <div class="project-meta">[+] Skidded and really bad uni Roblox script</div>
+              </div>
+            </div>
+            <div class="small">roblox • script</div>
+          </div>
+
+          <div class="project-item">
+            <div class="project-left">
+              <div class="project-bullet" style="background:#ffb86b"></div>
+              <div>
+                <div class="project-title">PSPWare</div>
+                <div class="project-meta">[~] Failed Roblox External</div>
+              </div>
+            </div>
+            <div class="small">testing</div>
+          </div>
+
+          <div class="project-item">
+            <div class="project-left">
+              <div class="project-bullet" style="background:#7fffd4"></div>
+              <div>
+                <div class="project-title">Shok Lite</div>
+                <div class="project-meta">[+] Roblox Grow A Garden infinite money exploit script</div>
+              </div>
+            </div>
+            <div class="small">working</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ABOUT TAB -->
+      <div id="tab-about" class="tab-content">
+        <p class="muted">Simple about section with extra details and a short bio.</p>
+        <p style="margin-top:10px">Name: <strong>jogs</strong><br>
+        Interests: <span class="muted">coding, game modding, music</span></p>
+
+        <div style="margin-top:12px">
+          <div class="small">Tip: click the pills to see a demo action (no real cheats are provided here).</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- audio element (will play after the gate unlock) -->
+  <audio id="bgAudio" src="https://cdn.pixabay.com/download/audio/2023/04/05/audio_1a2ed3d418.mp3?filename=lofi-study-145309.mp3" preload="auto"></audio>
+</div>
+
+<script>
+/* Slider logic using pointer events (works with mouse & touch). 
+   Sliding counts as a user gesture for autoplay. */
+(function(){
+  const thumb = document.getElementById('sliderThumb');
+  const track = document.getElementById('sliderTrack');
+  const fill = document.getElementById('sliderFill');
+  const gate = document.getElementById('gate');
+  const audio = document.getElementById('bgAudio');
+
+  let dragging = false;
+  let startX = 0;
+  let maxX = 0;
+  let currentX = 0;
+
+  function updatePositions(x){
+    // clamp
+    if(x < 0) x = 0;
+    if(x > maxX) x = maxX;
+    currentX = x;
+    thumb.style.left = x + 'px';
+    const pct = (x / maxX) * 100;
+    fill.style.width = pct + '%';
+  }
+
+  function pointerDown(e){
+    dragging = true;
+    startX = (e.clientX !== undefined) ? e.clientX : e.touches && e.touches[0].clientX;
+    maxX = track.clientWidth - thumb.clientWidth;
+    thumb.setPointerCapture && thumb.setPointerCapture(e.pointerId);
+    thumb.style.transition = 'none';
+  }
+
+  function pointerMove(e){
+    if(!dragging) return;
+    const clientX = (e.clientX !== undefined) ? e.clientX : e.touches && e.touches[0].clientX;
+    const delta = clientX - startX;
+    updatePositions(delta);
+  }
+
+  function pointerUp(){
+    if(!dragging) return;
+    dragging = false;
+    thumb.style.transition = '';
+    const threshold = maxX - 8;
+    if(currentX >= threshold){
+      // unlocked
+      // remove gate visually
+      gate.classList.add('hidden');
+      setTimeout(()=> gate.style.display='none', 420);
+      try { audio.play().catch(()=>{}); } catch(err){}
+    } else {
+      // reset
+      updatePositions(0);
+    }
+  }
+
+  // pointer events
+  thumb.addEventListener('pointerdown', (e)=>{ e.preventDefault(); pointerDown(e); });
+  document.addEventListener('pointermove', pointerMove);
+  document.addEventListener('pointerup', pointerUp);
+  // also support touch fallback for some browsers:
+  thumb.addEventListener('touchstart', (e)=>{ e.preventDefault(); pointerDown(e.touches[0]); });
+  document.addEventListener('touchmove', (e)=>{ pointerMove(e.touches[0]); }, {passive:false});
+  document.addEventListener('touchend', pointerUp);
+
+  // keyboard support for accessibility
+  thumb.addEventListener('keydown', (e)=>{
+    maxX = track.clientWidth - thumb.clientWidth;
+    if(e.key === 'ArrowRight'){ updatePositions(Math.min(currentX + 24, maxX)); }
+    if(e.key === 'ArrowLeft'){ updatePositions(Math.max(currentX - 24, 0)); }
+    if(e.key === 'Enter' || e.key === ' '){
+      if(currentX >= maxX - 8){
+        gate.classList.add('hidden'); setTimeout(()=> gate.style.display='none',420);
+        try{ audio.play().catch(()=>{}); }catch(e){}
+      } else {
+        updatePositions(0);
+      }
+    }
+  });
+})();
+
+/* Tab switching */
+(function(){
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const tabContents = document.querySelectorAll('.tab-content');
+
+  tabBtns.forEach(btn=>{
+    btn.addEventListener('click', (ev)=>{
+      ev.preventDefault();
+      const target = btn.getAttribute('data-tab');
+      tabBtns.forEach(b=>b.classList.remove('active'));
+      tabContents.forEach(c=>c.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(target).classList.add('active');
+
+      // accessibility aria
+      tabBtns.forEach(b=>b.setAttribute('aria-selected','false'));
+      btn.setAttribute('aria-selected','true');
+    });
+  });
+
+  // demo: clicking pill shows an alert (replace with real action)
+  document.querySelectorAll('.exploit-pill').forEach(p=>{
+    p.addEventListener('click', ()=> {
+      const name = p.querySelector('.exploit-name')?.innerText || 'item';
+      // demo behavior: show tiny toast
+      showToast(`${name} — demo details (no real cheats provided)`);
+    });
+  });
+
+  // small toast helper
+  function showToast(text){
+    const t = document.createElement('div');
+    t.textContent = text;
+    Object.assign(t.style,{
+      position:'fixed', right:'20px', bottom:'20px', padding:'10px 14px',
+      background:'linear-gradient(90deg,#222,#222a)', color:'#fff', borderRadius:'10px',
+      boxShadow:'0 6px 20px rgba(0,0,0,0.6)', zIndex:9999, fontSize:'13px'
+    });
+    document.body.appendChild(t);
+    setTimeout(()=> t.style.opacity='0',2200);
+    setTimeout(()=> t.remove(),2800);
+  }
+})();
+
+</script>
+</body>
+</html>
